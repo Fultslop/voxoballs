@@ -68,9 +68,16 @@ export function updateEntities(entities, voxelData) {
 
         e.pos.add(e.vel);
 
-        if (e.pos.x < e.size || e.pos.x > W - e.size) e.vel.x *= -1;
-        if (e.pos.y < e.size || e.pos.y > H - e.size) e.vel.y *= -1;
-        if (e.pos.z < e.size || e.pos.z > D - e.size) e.vel.z *= -1;
+        // Clamp + bounce: keep the sphere centre at least size+1 voxels from each
+        // wall face so that stampSphere never writes into the wall layer (index 0 /
+        // W-1 / H-1 / D-1).  A plain vel *= -1 without clamping lets the centre
+        // overshoot into the boundary zone before the next frame can correct it.
+        if (e.pos.x < e.size + 1)        { e.pos.x = e.size + 1;        e.vel.x =  Math.abs(e.vel.x); }
+        else if (e.pos.x > W - e.size - 1) { e.pos.x = W - e.size - 1;    e.vel.x = -Math.abs(e.vel.x); }
+        if (e.pos.y < e.size + 1)        { e.pos.y = e.size + 1;        e.vel.y =  Math.abs(e.vel.y); }
+        else if (e.pos.y > H - e.size - 1) { e.pos.y = H - e.size - 1;    e.vel.y = -Math.abs(e.vel.y); }
+        if (e.pos.z < e.size + 1)        { e.pos.z = e.size + 1;        e.vel.z =  Math.abs(e.vel.z); }
+        else if (e.pos.z > D - e.size - 1) { e.pos.z = D - e.size - 1;    e.vel.z = -Math.abs(e.vel.z); }
 
         const npx = Math.floor(e.pos.x);
         const npy = Math.floor(e.pos.y);

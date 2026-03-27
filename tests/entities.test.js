@@ -147,32 +147,48 @@ describe('updateEntities', () => {
         expect(dirty.maxZ).toBeGreaterThanOrEqual(32 + 7);
     });
 
-    it('wall voxels (x=0, x=W-1, y=0, y=H-1) are never zeroed by clearRegion', async () => {
+    it('wall voxels are never zeroed even when entity dirty bounds reach wall coordinates', async () => {
         const buf = new Uint8Array(W * H * D);
         initWalls(buf);
 
         const { Vector3 } = await import('three');
-        // Entity spawns at valid (clamped) position; move it around for many frames
-        const entity = {
-            pos: new Vector3(32, 32, 32),
-            vel: new Vector3(1, 1, 1),
-            color: 7,
+
+        // Entity A: starts just inside the bounce threshold on the min side.
+        // After 1 frame it moves to px = size-1, making minX = max(0, (size-1)-size) = 0.
+        // This is the exact scenario that triggers the bug without the fix.
+        const entityNearMinWall = {
+            pos: new Vector3(8 + 0.1, 8 + 0.1, 8 + 0.1),
+            vel: new Vector3(-1, -1, -1),
+            color: 3,
             size: 8,
         };
 
-        // Run 10 frames
-        for (let i = 0; i < 10; i++) {
-            updateEntities([entity], buf);
+        // Entity B: same but approaching the max walls (x=W-1, y=H-1, z=D-1).
+        const entityNearMaxWall = {
+            pos: new Vector3(W - 8 - 0.1, H - 8 - 0.1, D - 8 - 0.1),
+            vel: new Vector3(1, 1, 1),
+            color: 5,
+            size: 8,
+        };
+
+        // 5 frames is enough for both entities to cross the bounce boundary at
+        // least once and produce dirty bounds that include wall-layer coordinates.
+        for (let i = 0; i < 5; i++) {
+            updateEntities([entityNearMinWall, entityNearMaxWall], buf);
         }
 
-        // Wall voxels must still be 255
+        // Every wall voxel on all 6 faces must still be 255.
         for (let x = 0; x < W; x++) {
-            expect(buf[x + 0 * W + 0 * W * H]).toBe(255);        // floor sample
-            expect(buf[x + (H - 1) * W + 0 * W * H]).toBe(255);  // ceiling sample
+            for (let z = 0; z < D; z++) {
+                expect(buf[x + 0 * W + z * W * H]).toBe(255);        // floor (y=0)
+                expect(buf[x + (H-1) * W + z * W * H]).toBe(255);    // ceiling (y=H-1)
+            }
         }
         for (let y = 0; y < H; y++) {
-            expect(buf[0 + y * W + 0 * W * H]).toBe(255);         // left wall sample
-            expect(buf[(W - 1) + y * W + 0 * W * H]).toBe(255);   // right wall sample
+            for (let z = 0; z < D; z++) {
+                expect(buf[0 + y * W + z * W * H]).toBe(255);         // left wall (x=0)
+                expect(buf[(W-1) + y * W + z * W * H]).toBe(255);     // right wall (x=W-1)
+            }
         }
     });
 
