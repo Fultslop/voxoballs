@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voxel DDA</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        #setup-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 1000;
+        }
+        #setup-screen.hidden {
+            display: none;
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .quality-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .quality-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            border: 2px solid transparent;
+        }
+        .quality-option:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .quality-option.selected {
+            border-color: #4fc3f7;
+            background: rgba(79, 195, 247, 0.1);
+        }
+        .quality-option input[type="radio"] {
+            display: none;
+        }
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #555;
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .quality-option.selected .radio-circle {
+            border-color: #4fc3f7;
+        }
+        .quality-option.selected .radio-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #4fc3f7;
+            border-radius: 50%;
+        }
+        .option-details {
+            flex: 1;
+        }
+        .option-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .option-description {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .option-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .spec {
+            background: rgba(255,255,255,0.05);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        #start-btn {
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+        #start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.6);
+        }
+        #start-btn:active {
+            transform: scale(0.98);
+        }
+        #canvas-container {
+            width: 100%;
+            height: 100vh;
+        }
+        #back-btn {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(79, 195, 247, 0.8);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            z-index: 100;
+        }
+        #back-btn:hover {
+            background: rgba(79, 195, 247, 1);
+            transform: translateX(-50%) scale(1.05);
+        }
+        #back-btn:active {
+            transform: translateX(-50%) scale(0.98);
+        }
+    </style>
+</head>
+<body>
+<div id="setup-screen">
+    <h1>Voxel DDA Demo</h1>
+    <p class="subtitle">Select your preferred quality settings</p>
+    
+    <div class="quality-options">
+        <label class="quality-option selected" data-preset="low">
+            <input type="radio" name="quality" value="low" checked>
+            <div class="radio-circle"></div>
+            <div class="option-details">
+                <div class="option-name">Low Quality</div>
+                <div class="option-description">Best performance for mobile devices</div>
+                <div class="option-specs">
+                    <span class="spec">8 entities</span>
+                    <span class="spec">1 light</span>
+                    <span class="spec">64³ voxels</span>
+                    <span class="spec">Short shadows</span>
+                </div>
+            </div>
+        </label>
+        
+        <label class="quality-option" data-preset="medium">
+            <input type="radio" name="quality" value="medium">
+            <div class="radio-circle"></div>
+            <div class="option-details">
+                <div class="option-name">Medium Quality</div>
+                <div class="option-description">Balanced performance and visuals</div>
+                <div class="option-specs">
+                    <span class="spec">32 entities</span>
+                    <span class="spec">1 light</span>
+                    <span class="spec">128³ voxels</span>
+                    <span class="spec">Short shadows</span>
+                </div>
+            </div>
+        </label>
+        
+        <label class="quality-option" data-preset="high">
+            <input type="radio" name="quality" value="high">
+            <div class="radio-circle"></div>
+            <div class="option-details">
+                <div class="option-name">High Quality</div>
+                <div class="option-description">Best visuals for powerful devices</div>
+                <div class="option-specs">
+                    <span class="spec">128 entities</span>
+                    <span class="spec">3 lights</span>
+                    <span class="spec">320×200×200 voxels</span>
+                    <span class="spec">Full shadows</span>
+                </div>
+            </div>
+        </label>
+    </div>
+    
+    <button id="start-btn">Start Demo</button>
+</div>
+
+<div id="canvas-container">
+    <button id="back-btn">Change Quality</button>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.170.0/build/three.module.js" } }
+</script>
+
+<script type="module">
+    // Check if we have a quality preset in the URL hash
+    const urlPreset = window.location.hash.slice(1); // Remove the #
+    const validPresets = ['low', 'medium', 'high'];
+    
+    if (urlPreset && validPresets.includes(urlPreset)) {
+        // We have a valid preset, hide setup screen and start demo
+        document.getElementById('setup-screen').classList.add('hidden');
+        
+        // Set config and start demo
+        import('./js/config.js').then(({ setConfig }) => {
+            setConfig(urlPreset);
+            return import('./js/main.js');
+        });
+    } else {
+        // No preset in URL, show setup screen and handle selection
+        const options = document.querySelectorAll('.quality-option');
+        const startBtn = document.getElementById('start-btn');
+        const setupScreen = document.getElementById('setup-screen');
+        
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                options.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                option.querySelector('input').checked = true;
+            });
+        });
+        
+        startBtn.addEventListener('click', () => {
+            const selectedPreset = document.querySelector('input[name="quality"]:checked').value;
+            window.location.hash = selectedPreset;
+            window.location.reload();
+        });
+    }
+    
+    // Back button handler
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.location.hash = '';
+            window.location.reload();
+        });
+    }
+</script>
+</body>
+</html>
