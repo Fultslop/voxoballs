@@ -22,12 +22,19 @@ export function initWalls(voxelData) {
 }
 
 export function createEntities() {
-    return Array.from({ length: NUM_ENTITIES }, () => ({
-        pos: new THREE.Vector3(Math.random() * W, Math.random() * H, Math.random() * D),
-        vel: new THREE.Vector3((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2),
-        color: Math.floor(Math.random() * 254) + 1,
-        size: Math.floor(Math.random() * 8) + 8
-    }));
+    return Array.from({ length: NUM_ENTITIES }, () => {
+        const size = Math.floor(Math.random() * 8) + 8;
+        return {
+            pos: new THREE.Vector3(
+                size + Math.random() * (W - 2 * size),
+                size + Math.random() * (H - 2 * size),
+                size + Math.random() * (D - 2 * size)
+            ),
+            vel: new THREE.Vector3((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2),
+            color: Math.floor(Math.random() * 254) + 1,
+            size,
+        };
+    });
 }
 
 // Bounds of the region stamped during the previous frame — cleared at the start of each frame.
