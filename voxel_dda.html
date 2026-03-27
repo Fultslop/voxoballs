@@ -156,9 +156,21 @@
         #back-btn:active {
             transform: translateX(-50%) scale(0.98);
         }
+        #fps-counter {
+            position: fixed;
+            top: 12px;
+            right: 15px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-family: monospace;
+            z-index: 100;
+            pointer-events: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
+<div id="fps-counter">-- FPS</div>
 <div id="setup-screen">
     <h1>Voxel DDA Demo</h1>
     <p class="subtitle">Select your preferred quality settings</p>

@@ -42,7 +42,9 @@ export function createScene(dataTexture, paletteTexture, shadowRTs, pointLights,
         glslVersion: THREE.GLSL3
     });
 
-    scene.add(new THREE.Mesh(geom, mainMat));
+    const mesh = new THREE.Mesh(geom, mainMat);
+    mesh.frustumCulled = false;
+    scene.add(mesh);
 
     function onResize() {
         const aspect = window.innerWidth / window.innerHeight;
