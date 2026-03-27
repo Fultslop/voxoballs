@@ -47,7 +47,14 @@ let prevDirtyBounds = null;
  */
 export function updateEntities(entities, voxelData) {
     if (prevDirtyBounds) {
-        clearRegion(voxelData, prevDirtyBounds, W, H);
+        // Clamp to interior to avoid clearing wall voxels (walls are at index 0 and W/H/D-1).
+        // Entities can drift inside the wall layer before the bounce triggers, making the
+        // dirty AABB include wall coordinates even though we never intend to stamp there.
+        const cb = prevDirtyBounds;
+        clearRegion(voxelData, {
+            minX: Math.max(1, cb.minX), minY: Math.max(1, cb.minY), minZ: Math.max(1, cb.minZ),
+            maxX: Math.min(W - 2, cb.maxX), maxY: Math.min(H - 2, cb.maxY), maxZ: Math.min(D - 2, cb.maxZ),
+        }, W, H);
     }
 
     let dirtyBounds = null;
