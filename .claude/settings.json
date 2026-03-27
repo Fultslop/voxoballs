@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"c:/Users/lassc/Code/js/voxel_balls\" log --oneline --all)",
+      "Bash(grep -l \"Task 3\\\\|texSubImage\\\\|dirty region\\\\|uploadDirty\\\\|scratch\" c:Userslassc.claudeplans/*.md)",
+      "Bash(git -C \"c:\\\\Users\\\\lassc\\\\Code\\\\js\\\\voxel_balls\\\\.worktrees\\\\voxel-perf\" log --oneline -20)",
+      "Bash(git -C \"c:\\\\Users\\\\lassc\\\\Code\\\\js\\\\voxel_balls\" log --oneline -10)",
+      "Bash(git -C \"c:\\\\Users\\\\lassc\\\\Code\\\\js\\\\voxel_balls\\\\.worktrees\\\\voxel-perf\" show 8ffd96f --stat)",
+      "Bash(git -C \"c:\\\\Users\\\\lassc\\\\Code\\\\js\\\\voxel_balls\" show 148fb11 --stat)",
+      "Bash(git -C \"c:\\\\Users\\\\lassc\\\\Code\\\\js\\\\voxel_balls\" show 148fb11 -- \"*.md\")",
+      "Bash(node -e \":*)"
+    ]
+  }
+}
