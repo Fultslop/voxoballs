@@ -1,10 +1,14 @@
 // GLSL ES requires constant indices into sampler arrays; generate unrolled if/else at build time.
 // Use at least 1 for array declarations to avoid GLSL compilation errors when N_LIGHTS=0
-export function genShadowSamplerUnroll(n) {
+// pcfTaps=1: center sample only. pcfTaps=5: cross pattern (center + 4 cardinal neighbors).
+export function genShadowSamplerUnroll(n, pcfTaps = 5) {
+    const offsets = pcfTaps === 1
+        ? ['vec2(0.0, 0.0)']
+        : ['vec2(0.0, 0.0)', 'vec2( ts.x, 0.0)', 'vec2(-ts.x, 0.0)', 'vec2(0.0,  ts.y)', 'vec2(0.0, -ts.y)'];
     let code = '';
     for (let i = 0; i < n; i++) {
         code += `                    ${i === 0 ? 'if' : '} else if'}(l == ${i}) {\n`;
-        for (const offset of ['vec2(0.0, 0.0)', 'vec2( ts.x, 0.0)', 'vec2(-ts.x, 0.0)', 'vec2(0.0,  ts.y)', 'vec2(0.0, -ts.y)']) {
+        for (const offset of offsets) {
             code += `                        shadow += step(plDist - bias, texture(uShadowMap[${i}], shadowUV + ${offset}).r);\n`;
         }
     }
@@ -14,7 +18,7 @@ export function genShadowSamplerUnroll(n) {
     return code;
 }
 
-export function createShaders(nLights, ambient) {
+export function createShaders(nLights, ambient, pcfTaps = 5) {
     const shaderNLights = Math.max(1, nLights);
     
     const vertexShader = `
@@ -125,8 +129,8 @@ void main(){
                 if(plNDotL > 0.0) {
                     vec2 shadowUV = dirToEquirectUV(-plDirNorm);
                     float shadow = 0.0;
-                    ${genShadowSamplerUnroll(shaderNLights)}
-                    shadow /= 5.0;
+                    ${genShadowSamplerUnroll(shaderNLights, pcfTaps)}
+                    shadow /= ${pcfTaps}.0;
 
                     float att = 1.0 / (1.0 + 0.01 * plDist + 0.0002 * plDist * plDist);
                     light += uPointLightColor[l] * plNDotL * att * 3.0 * shadow;

@@ -29,4 +29,24 @@ describe('qualityPresets', () => {
         cfg.setConfig('medium');
         expect(cfg.MAX_DPR).toBe(1);
     });
+
+    it('low preset shadowPcfTaps is 1', () => {
+        expect(qualityPresets.low.shadowPcfTaps).toBe(1);
+    });
+
+    it('medium preset shadowPcfTaps is 1', () => {
+        expect(qualityPresets.medium.shadowPcfTaps).toBe(1);
+    });
+
+    it('high preset shadowPcfTaps is 5', () => {
+        expect(qualityPresets.high.shadowPcfTaps).toBe(5);
+    });
+
+    it('setConfig sets SHADOW_PCF_TAPS', async () => {
+        const cfg = await import('../js/config.js');
+        cfg.setConfig('high');
+        expect(cfg.SHADOW_PCF_TAPS).toBe(5);
+        cfg.setConfig('medium');
+        expect(cfg.SHADOW_PCF_TAPS).toBe(1);
+    });
 });

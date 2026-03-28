@@ -4,9 +4,9 @@ import { createPointLights, updatePointLights } from './lights.js';
 import { createShadowSystem } from './shadow.js';
 import { createScene } from './scene.js';
 import { createShaders } from './shaders/main.js';
-import { N_LIGHTS, AMBIENT, W, H, D } from './config.js';
+import { N_LIGHTS, AMBIENT, W, H, D, SHADOW_PCF_TAPS } from './config.js';
 
-const { vertexShader, fragmentShader } = createShaders(N_LIGHTS, AMBIENT);
+const { vertexShader, fragmentShader } = createShaders(N_LIGHTS, AMBIENT, SHADOW_PCF_TAPS);
 
 const { dataTexture, voxelData } = createDataTexture();
 const { paletteTexture } = createPaletteTexture();
