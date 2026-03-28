@@ -18,6 +18,7 @@ const pointLights = createPointLights();
 
 const { shadowRTs, renderShadows } = createShadowSystem(dataTexture, pointLights);
 const { scene, camera, renderer, onResize } = createScene(dataTexture, paletteTexture, shadowRTs, pointLights, vertexShader, fragmentShader);
+onResize(); // Set initial pixel ratio from preset
 
 // FPS counter
 const fpsEl = document.getElementById('fps-counter');

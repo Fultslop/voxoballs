@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { W, H, D, AMBIENT } from './config.js';
+import { W, H, D, AMBIENT, MAX_DPR } from './config.js';
 
 export function createScene(dataTexture, paletteTexture, shadowRTs, pointLights, vertexShader, fragmentShader) {
     const scene = new THREE.Scene();
@@ -54,7 +54,7 @@ export function createScene(dataTexture, paletteTexture, shadowRTs, pointLights,
         camera.aspect = aspect;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_DPR));
     }
 
     return { scene, camera, renderer, mainMat, onResize };

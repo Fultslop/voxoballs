@@ -5,6 +5,7 @@ export let N_LIGHTS = 2;
 export let AMBIENT = 0.0;
 export let SHADOW_CAST_DISTANCE = 128;
 export let NUM_ENTITIES = 32;
+export let MAX_DPR = 2;
 
 export const qualityPresets = {
     low: {
@@ -16,7 +17,8 @@ export const qualityPresets = {
         h: 64,
         d: 64,
         shadowCastDistance: 32,
-        ambient: 0.3
+        ambient: 0.3,
+        maxDpr: 1
     },
     medium: {
         name: 'Medium Quality',
@@ -27,7 +29,8 @@ export const qualityPresets = {
         h: 96,
         d: 96,
         shadowCastDistance: 64,
-        ambient: 0.0
+        ambient: 0.0,
+        maxDpr: 1
     },
     high: {
         name: 'High Quality',
@@ -38,7 +41,8 @@ export const qualityPresets = {
         h: 200,
         d: 200,
         shadowCastDistance: 128,
-        ambient: 0.0
+        ambient: 0.0,
+        maxDpr: 2
     }
 };
 
@@ -52,4 +56,5 @@ export function setConfig(preset) {
     D = p.d;
     SHADOW_CAST_DISTANCE = p.shadowCastDistance;
     AMBIENT = p.ambient;
+    MAX_DPR = p.maxDpr;
 }
