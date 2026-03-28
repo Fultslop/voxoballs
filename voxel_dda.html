@@ -214,6 +214,63 @@
             color: #fff;
             font-variant-numeric: tabular-nums;
         }
+        #custom-panel {
+            position: fixed;
+            top: 50px;
+            right: 15px;
+            background: rgba(0,0,0,0.82);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.8rem;
+            z-index: 100;
+            min-width: 240px;
+        }
+        #custom-panel-header {
+            padding: 7px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            user-select: none;
+        }
+        #custom-panel-toggle {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0;
+        }
+        #custom-panel-body {
+            padding: 10px 12px;
+        }
+        #custom-panel-body.collapsed {
+            display: none;
+        }
+        #custom-panel .slider-row {
+            margin-bottom: 8px;
+        }
+        #custom-panel .slider-label {
+            width: 110px;
+        }
+        #custom-apply {
+            width: 100%;
+            margin-top: 8px;
+            padding: 7px;
+            background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        #custom-apply:hover {
+            filter: brightness(1.15);
+        }
     </style>
 </head>
 <body>
@@ -354,6 +411,96 @@
         // We have a valid preset, hide setup screen and start demo
         document.getElementById('setup-screen').classList.add('hidden');
         
+        // Demo overlay — only shown in custom mode
+        if (urlPreset === 'custom') {
+            const stored = sessionStorage.getItem('customSettings');
+            const s = stored ? JSON.parse(stored) : DEFAULT_CUSTOM;
+
+            const panel = document.createElement('div');
+            panel.id = 'custom-panel';
+            panel.innerHTML = `
+                <div id="custom-panel-header">
+                    Custom Settings
+                    <button id="custom-panel-toggle">▾</button>
+                </div>
+                <div id="custom-panel-body">
+                    <div class="slider-row">
+                        <span class="slider-label">Entities</span>
+                        <input type="range" id="ps-entities" min="1" max="256" step="1" value="${s.numEntities}">
+                        <span class="slider-value" id="pv-entities">${s.numEntities}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Lights</span>
+                        <input type="range" id="ps-lights" min="1" max="3" step="1" value="${s.nLights}">
+                        <span class="slider-value" id="pv-lights">${s.nLights}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Grid W</span>
+                        <input type="range" id="ps-w" min="32" max="512" step="8" value="${s.w}">
+                        <span class="slider-value" id="pv-w">${s.w}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Grid H</span>
+                        <input type="range" id="ps-h" min="32" max="512" step="8" value="${s.h}">
+                        <span class="slider-value" id="pv-h">${s.h}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Grid D</span>
+                        <input type="range" id="ps-d" min="32" max="512" step="8" value="${s.d}">
+                        <span class="slider-value" id="pv-d">${s.d}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Shadow Dist</span>
+                        <input type="range" id="ps-shadow-dist" min="16" max="256" step="8" value="${s.shadowCastDistance}">
+                        <span class="slider-value" id="pv-shadow-dist">${s.shadowCastDistance}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">DPR cap</span>
+                        <input type="range" id="ps-dpr" min="1" max="2" step="0.25" value="${s.maxDpr}">
+                        <span class="slider-value" id="pv-dpr">${s.maxDpr}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">PCF Taps</span>
+                        <select id="ps-pcf">
+                            <option value="1" ${s.shadowPcfTaps === 1 ? 'selected' : ''}>1 (fast)</option>
+                            <option value="5" ${s.shadowPcfTaps === 5 ? 'selected' : ''}>5 (quality)</option>
+                        </select>
+                    </div>
+                    <button id="custom-apply">Apply &amp; Restart</button>
+                </div>`;
+            document.body.appendChild(panel);
+
+            // Live readouts
+            ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+                const input = document.getElementById('ps-' + id);
+                const display = document.getElementById('pv-' + id);
+                input.addEventListener('input', () => { display.textContent = input.value; });
+            });
+
+            // Collapse toggle
+            document.getElementById('custom-panel-toggle').addEventListener('click', () => {
+                const body = document.getElementById('custom-panel-body');
+                const btn  = document.getElementById('custom-panel-toggle');
+                body.classList.toggle('collapsed');
+                btn.textContent = body.classList.contains('collapsed') ? '▸' : '▾';
+            });
+
+            // Apply & Restart
+            document.getElementById('custom-apply').addEventListener('click', () => {
+                sessionStorage.setItem('customSettings', JSON.stringify({
+                    numEntities:        parseInt(document.getElementById('ps-entities').value),
+                    nLights:            parseInt(document.getElementById('ps-lights').value),
+                    w:                  parseInt(document.getElementById('ps-w').value),
+                    h:                  parseInt(document.getElementById('ps-h').value),
+                    d:                  parseInt(document.getElementById('ps-d').value),
+                    shadowCastDistance: parseInt(document.getElementById('ps-shadow-dist').value),
+                    maxDpr:             parseFloat(document.getElementById('ps-dpr').value),
+                    shadowPcfTaps:      parseInt(document.getElementById('ps-pcf').value)
+                }));
+                window.location.reload();
+            });
+        }
+
         // Set config and start demo
         import('./js/config.js').then(({ setConfig, setCustomConfig }) => {
             if (urlPreset === 'custom') {
