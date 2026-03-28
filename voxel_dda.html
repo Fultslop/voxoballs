@@ -260,7 +260,18 @@
                 option.querySelector('input').checked = true;
             });
         });
-        
+
+        // Restore last selection if returning from demo
+        const lastPreset = sessionStorage.getItem('lastPreset');
+        if (lastPreset) {
+            const target = document.querySelector(`[data-preset="${lastPreset}"]`);
+            if (target) {
+                options.forEach(o => o.classList.remove('selected'));
+                target.classList.add('selected');
+                target.querySelector('input').checked = true;
+            }
+        }
+
         startBtn.addEventListener('click', () => {
             const selectedPreset = document.querySelector('input[name="quality"]:checked').value;
             window.location.hash = selectedPreset;
@@ -272,6 +283,7 @@
     const backBtn = document.getElementById('back-btn');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
+            sessionStorage.setItem('lastPreset', window.location.hash.slice(1));
             window.location.hash = '';
             window.location.reload();
         });
