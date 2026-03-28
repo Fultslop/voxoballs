@@ -338,17 +338,31 @@
 </script>
 
 <script type="module">
+    const DEFAULT_CUSTOM = {
+        numEntities: 128, nLights: 3,
+        w: 320, h: 200, d: 200,
+        shadowCastDistance: 128,
+        maxDpr: 1,
+        shadowPcfTaps: 5
+    };
+
     // Check if we have a quality preset in the URL hash
     const urlPreset = window.location.hash.slice(1); // Remove the #
-    const validPresets = ['low', 'medium', 'high'];
+    const validPresets = ['low', 'medium', 'high', 'custom'];
     
     if (urlPreset && validPresets.includes(urlPreset)) {
         // We have a valid preset, hide setup screen and start demo
         document.getElementById('setup-screen').classList.add('hidden');
         
         // Set config and start demo
-        import('./js/config.js').then(({ setConfig }) => {
-            setConfig(urlPreset);
+        import('./js/config.js').then(({ setConfig, setCustomConfig }) => {
+            if (urlPreset === 'custom') {
+                const stored = sessionStorage.getItem('customSettings');
+                const settings = stored ? JSON.parse(stored) : DEFAULT_CUSTOM;
+                setCustomConfig(settings);
+            } else {
+                setConfig(urlPreset);
+            }
             return import('./js/main.js');
         });
     } else {
@@ -416,6 +430,18 @@
 
         startBtn.addEventListener('click', () => {
             const selectedPreset = document.querySelector('input[name="quality"]:checked').value;
+            if (selectedPreset === 'custom') {
+                sessionStorage.setItem('customSettings', JSON.stringify({
+                    numEntities:        parseInt(document.getElementById('s-entities').value),
+                    nLights:            parseInt(document.getElementById('s-lights').value),
+                    w:                  parseInt(document.getElementById('s-w').value),
+                    h:                  parseInt(document.getElementById('s-h').value),
+                    d:                  parseInt(document.getElementById('s-d').value),
+                    shadowCastDistance: parseInt(document.getElementById('s-shadow-dist').value),
+                    maxDpr:             parseFloat(document.getElementById('s-dpr').value),
+                    shadowPcfTaps:      parseInt(document.getElementById('s-pcf').value)
+                }));
+            }
             window.location.hash = selectedPreset;
             window.location.reload();
         });
