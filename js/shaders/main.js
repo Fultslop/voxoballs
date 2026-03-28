@@ -116,7 +116,7 @@ void main(){
             }
             light += max(dot(normal, -rd), 0.0) * 0.1;
 
-            // Shadow-mapped point lights (5-tap PCF each)
+            // Shadow-mapped point lights (PCF shadow sampling)
             vec2 ts = vec2(1.0 / 256.0, 1.0 / 128.0);
             float bias = 4.0;
 
