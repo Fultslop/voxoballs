@@ -167,6 +167,53 @@
             pointer-events: none;
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
+        #custom-sliders {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        #custom-sliders.visible {
+            display: block;
+        }
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+        .slider-row:last-child {
+            margin-bottom: 0;
+        }
+        .slider-label {
+            width: 130px;
+            flex-shrink: 0;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+            accent-color: #4fc3f7;
+        }
+        .slider-row select {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.85rem;
+        }
+        .slider-value {
+            width: 36px;
+            text-align: right;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+        }
     </style>
 </head>
 <body>
@@ -220,8 +267,65 @@
                 </div>
             </div>
         </label>
+
+        <label class="quality-option" data-preset="custom">
+            <input type="radio" name="quality" value="custom">
+            <div class="radio-circle"></div>
+            <div class="option-details">
+                <div class="option-name">Custom</div>
+                <div class="option-description">Tune every parameter to isolate performance</div>
+                <div class="option-specs">
+                    <span class="spec">Adjustable</span>
+                </div>
+            </div>
+        </label>
     </div>
-    
+
+    <div id="custom-sliders">
+        <div class="slider-row">
+            <span class="slider-label">Entities</span>
+            <input type="range" id="s-entities" min="1" max="256" step="1" value="128">
+            <span class="slider-value" id="v-entities">128</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Lights</span>
+            <input type="range" id="s-lights" min="1" max="3" step="1" value="3">
+            <span class="slider-value" id="v-lights">3</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Grid W</span>
+            <input type="range" id="s-w" min="32" max="512" step="8" value="320">
+            <span class="slider-value" id="v-w">320</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Grid H</span>
+            <input type="range" id="s-h" min="32" max="512" step="8" value="200">
+            <span class="slider-value" id="v-h">200</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Grid D</span>
+            <input type="range" id="s-d" min="32" max="512" step="8" value="200">
+            <span class="slider-value" id="v-d">200</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Shadow Distance</span>
+            <input type="range" id="s-shadow-dist" min="16" max="256" step="8" value="128">
+            <span class="slider-value" id="v-shadow-dist">128</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">DPR cap</span>
+            <input type="range" id="s-dpr" min="1" max="2" step="0.25" value="1">
+            <span class="slider-value" id="v-dpr">1</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">PCF Taps</span>
+            <select id="s-pcf">
+                <option value="1">1 (fast)</option>
+                <option value="5" selected>5 (quality)</option>
+            </select>
+        </div>
+    </div>
+
     <button id="start-btn">Start Demo</button>
 </div>
 
@@ -269,6 +373,44 @@
                 options.forEach(o => o.classList.remove('selected'));
                 target.classList.add('selected');
                 target.querySelector('input').checked = true;
+            }
+        }
+
+        const customSlidersEl = document.getElementById('custom-sliders');
+
+        // Show/hide slider panel when Custom is selected
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                customSlidersEl.classList.toggle('visible', option.dataset.preset === 'custom');
+            });
+        });
+
+        // Live readouts for range inputs
+        ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+            const input = document.getElementById('s-' + id);
+            const display = document.getElementById('v-' + id);
+            input.addEventListener('input', () => { display.textContent = input.value; });
+        });
+
+        // If returning to custom, show panel and populate sliders
+        if (lastPreset === 'custom') {
+            customSlidersEl.classList.add('visible');
+            const stored = sessionStorage.getItem('customSettings');
+            if (stored) {
+                const s = JSON.parse(stored);
+                document.getElementById('s-entities').value    = s.numEntities;
+                document.getElementById('s-lights').value      = s.nLights;
+                document.getElementById('s-w').value           = s.w;
+                document.getElementById('s-h').value           = s.h;
+                document.getElementById('s-d').value           = s.d;
+                document.getElementById('s-shadow-dist').value = s.shadowCastDistance;
+                document.getElementById('s-dpr').value         = s.maxDpr;
+                document.getElementById('s-pcf').value         = s.shadowPcfTaps;
+                // Sync readouts after programmatic value set
+                ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+                    document.getElementById('v-' + id).textContent =
+                        document.getElementById('s-' + id).value;
+                });
             }
         }
 
