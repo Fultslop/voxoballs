@@ -63,3 +63,14 @@ export function setConfig(preset) {
     MAX_DPR = p.maxDpr;
     SHADOW_PCF_TAPS = p.shadowPcfTaps;
 }
+
+export function setCustomConfig(s) {
+    NUM_ENTITIES         = s.numEntities;
+    N_LIGHTS             = s.nLights;
+    W                    = s.w;
+    H                    = s.h;
+    D                    = s.d;
+    SHADOW_CAST_DISTANCE = s.shadowCastDistance;
+    MAX_DPR              = s.maxDpr;
+    SHADOW_PCF_TAPS      = s.shadowPcfTaps;
+}
