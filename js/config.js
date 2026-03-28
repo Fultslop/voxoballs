@@ -23,9 +23,9 @@ export const qualityPresets = {
         description: 'Balanced performance and visuals',
         numEntities: 32,
         nLights: 1,
-        w: 128,
-        h: 128,
-        d: 128,
+        w: 96,
+        h: 96,
+        d: 96,
         shadowCastDistance: 64,
         ambient: 0.0
     },
