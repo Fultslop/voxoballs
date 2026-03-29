@@ -9,7 +9,7 @@ Coming soon.
 
 ## How to run
 
-Open `voxel_dda.html` in a browser. Pick a quality preset on the setup screen and click **Start**.
+Open `index.html` in a browser. Pick a quality preset on the setup screen and click **Start**.
 
 No server required — just open the file directly.
 
