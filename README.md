@@ -2,10 +2,14 @@
 
 A real-time voxel renderer that runs in the browser with no build step. Colored spheres bounce around inside a 3D grid of voxels, illuminated by point lights with soft shadows.
 
+
+## Project Background
+
+Voxoballs is part of an exploration into how far AI-assisted development can go when building a non-trivial apps. This project has been built using [superpowers](https://github.com/obra/superpowers), then implemented using using Claude and to a lesser extent Google Gemini.
+
 ## Live demo
 
-Coming soon.
-<!-- TODO: add URL -->
+[github pages](https://fultslop.github.io/voxoballs/)
 
 ## How to run
 
