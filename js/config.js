@@ -5,6 +5,9 @@ export let N_LIGHTS = 2;
 export let AMBIENT = 0.0;
 export let SHADOW_CAST_DISTANCE = 128;
 export let NUM_ENTITIES = 32;
+export let FOV = 80;
+export let ENTITY_RADIUS_MIN = 8;
+export let ENTITY_RADIUS_MAX = 16;
 export let MAX_DPR = 2;
 export let SHADOW_PCF_TAPS = 5;
 
@@ -66,6 +69,9 @@ export function setConfig(preset) {
 
 export function setCustomConfig(s) {
     NUM_ENTITIES         = s.numEntities;
+    FOV                  = s.fov;
+    ENTITY_RADIUS_MIN    = s.entityRadiusMin;
+    ENTITY_RADIUS_MAX    = s.entityRadiusMax;
     N_LIGHTS             = s.nLights;
     W                    = s.w;
     H                    = s.h;

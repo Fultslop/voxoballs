@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <rect width="800" height="400" fill="#1a1a2e"/>
+
+  <!-- LEFT PANEL: 5-tap cross pattern in UV space -->
+  <text x="190" y="40" font-family="sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">5-Tap Cross Pattern (UV space)</text>
+
+  <!-- Shadow map texture grid background -->
+  <rect x="60" y="55" width="260" height="260" fill="#0d0d1f" stroke="#4fc3f7" stroke-width="1"/>
+  <!-- Fine grid lines -->
+  <line x1="60"  y1="185" x2="320" y2="185" stroke="#4fc3f7" stroke-width="0.5" opacity="0.3"/>
+  <line x1="190" y1="55"  x2="190" y2="315" stroke="#4fc3f7" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Center tap (0, 0) -->
+  <circle cx="190" cy="185" r="10" fill="#ff9800"/>
+  <text x="205" y="175" font-family="sans-serif" font-size="11" fill="#ff9800">(0, 0)</text>
+
+  <!-- Right tap (+ts.x, 0) -->
+  <circle cx="250" cy="185" r="10" fill="#4fc3f7"/>
+  <text x="256" y="175" font-family="sans-serif" font-size="11" fill="#4fc3f7">(+ts.x, 0)</text>
+
+  <!-- Left tap (-ts.x, 0) -->
+  <circle cx="130" cy="185" r="10" fill="#4fc3f7"/>
+  <text x="55"  y="175" font-family="sans-serif" font-size="11" fill="#4fc3f7">(−ts.x, 0)</text>
+
+  <!-- Top tap (0, +ts.y) -->
+  <circle cx="190" cy="125" r="10" fill="#4fc3f7"/>
+  <text x="200" y="118" font-family="sans-serif" font-size="11" fill="#4fc3f7">(0, +ts.y)</text>
+
+  <!-- Bottom tap (0, -ts.y) -->
+  <circle cx="190" cy="245" r="10" fill="#4fc3f7"/>
+  <text x="200" y="268" font-family="sans-serif" font-size="11" fill="#4fc3f7">(0, −ts.y)</text>
+
+  <!-- Connecting lines -->
+  <line x1="130" y1="185" x2="250" y2="185" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="190" y1="125" x2="190" y2="245" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ts labels -->
+  <text x="218" y="200" font-family="sans-serif" font-size="11" fill="#888">ts.x</text>
+  <text x="195" y="160" font-family="sans-serif" font-size="11" fill="#888">ts.y</text>
+
+  <!-- ts note -->
+  <text x="190" y="335" font-family="monospace" font-size="11" fill="#888" text-anchor="middle">ts = vec2(1/1024, 1/512)</text>
+
+  <!-- MIDDLE divider -->
+  <line x1="400" y1="40" x2="400" y2="370" stroke="#333" stroke-width="1"/>
+
+  <!-- RIGHT PANEL: 1-tap vs 5-tap shadow edge comparison -->
+  <text x="600" y="40" font-family="sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">Shadow Edge: 1-tap vs 5-tap</text>
+
+  <!-- 1-tap shadow edge (left half of right panel) -->
+  <text x="480" y="68" font-family="sans-serif" font-size="12" fill="#4fc3f7">1 tap (sharp)</text>
+  <!-- Sharp columns -->
+  <rect x="420" y="75" width="60" height="220" fill="#222" stroke="none"/>
+  <rect x="420" y="75" width="60" height="220" fill="rgba(0,0,0,0.6)"/>
+  <!-- shadow side (left) -->
+  <rect x="420" y="75" width="30" height="220" fill="#111"/>
+  <!-- lit side (right) -->
+  <rect x="450" y="75" width="30" height="220" fill="#cc8800" opacity="0.5"/>
+  <!-- hard edge marker -->
+  <line x1="450" y1="75" x2="450" y2="295" stroke="#f44336" stroke-width="2"/>
+  <text x="420" y="308" font-family="sans-serif" font-size="11" fill="#888">shadow │ lit</text>
+
+  <!-- 5-tap shadow edge (right half of right panel) -->
+  <text x="640" y="68" font-family="sans-serif" font-size="12" fill="#ff9800">5 taps (soft)</text>
+  <!-- Gradient-like soft edge using rects of increasing opacity -->
+  <rect x="590" y="75" width="20" height="220" fill="#111"/>
+  <rect x="610" y="75" width="15" height="220" fill="#111" opacity="0.85"/>
+  <rect x="625" y="75" width="15" height="220" fill="#cc8800" opacity="0.2"/>
+  <rect x="640" y="75" width="15" height="220" fill="#cc8800" opacity="0.35"/>
+  <rect x="655" y="75" width="15" height="220" fill="#cc8800" opacity="0.5"/>
+  <rect x="670" y="75" width="20" height="220" fill="#cc8800" opacity="0.5"/>
+  <!-- soft edge label -->
+  <line x1="625" y1="75" x2="655" y2="75" stroke="#ff9800" stroke-width="2"/>
+  <line x1="625" y1="295" x2="655" y2="295" stroke="#ff9800" stroke-width="2"/>
+  <line x1="625" y1="75" x2="625" y2="295" stroke="#ff9800" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="655" y1="75" x2="655" y2="295" stroke="#ff9800" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="540" y="190" font-family="sans-serif" font-size="11" fill="#ff9800" transform="rotate(-90,540,190)">blend zone</text>
+
+  <!-- Formula -->
+  <text x="600" y="330" font-family="monospace" font-size="12" fill="#ffffff" text-anchor="middle">shadow = (Σ taps) / N</text>
+  <text x="600" y="350" font-family="sans-serif" font-size="11" fill="#888" text-anchor="middle">continuous [0, 1] shadow factor</text>
+
+  <!-- Title -->
+  <text x="400" y="390" font-family="sans-serif" font-size="13" fill="#888" text-anchor="middle">PCF: 5-Tap Cross Pattern and Edge Softening</text>
+</svg>

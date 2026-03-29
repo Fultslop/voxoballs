@@ -19,32 +19,38 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            overflow-y: auto;
             color: #fff;
             z-index: 1000;
+        }
+        #setup-screen::before,
+        #setup-screen::after {
+            content: '';
+            flex: 1;
+            min-height: 20px;
         }
         #setup-screen.hidden {
             display: none;
         }
         h1 {
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-size: 2rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .subtitle {
             color: #888;
-            margin-bottom: 30px;
+            margin-bottom: 14px;
         }
         .quality-options {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
         .quality-option {
             display: flex;
             align-items: flex-start;
-            padding: 15px 20px;
+            padding: 9px 16px;
             background: rgba(255,255,255,0.05);
             border-radius: 10px;
             cursor: pointer;
@@ -91,12 +97,12 @@
         .option-name {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
         .option-description {
             color: #888;
             font-size: 0.9rem;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .option-specs {
             display: flex;
@@ -171,8 +177,8 @@
             display: none;
             width: 100%;
             max-width: 500px;
-            margin-bottom: 20px;
-            padding: 16px 20px;
+            margin-bottom: 12px;
+            padding: 10px 14px;
             background: rgba(255,255,255,0.05);
             border-radius: 10px;
             box-sizing: border-box;
@@ -184,7 +190,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-size: 0.85rem;
             color: #ccc;
         }
@@ -287,7 +293,7 @@
                 <div class="option-name">Low Quality</div>
                 <div class="option-description">Best performance for mobile devices</div>
                 <div class="option-specs">
-                    <span class="spec">8 entities</span>
+                    <span class="spec">8 spheres</span>
                     <span class="spec">1 light</span>
                     <span class="spec">64³ voxels</span>
                     <span class="spec">Short shadows</span>
@@ -302,7 +308,7 @@
                 <div class="option-name">Medium Quality</div>
                 <div class="option-description">Balanced performance and visuals</div>
                 <div class="option-specs">
-                    <span class="spec">32 entities</span>
+                    <span class="spec">32 spheres</span>
                     <span class="spec">1 light</span>
                     <span class="spec">96³ voxels</span>
                     <span class="spec">Short shadows</span>
@@ -317,7 +323,7 @@
                 <div class="option-name">High Quality</div>
                 <div class="option-description">Best visuals for powerful devices</div>
                 <div class="option-specs">
-                    <span class="spec">128 entities</span>
+                    <span class="spec">128 spheres</span>
                     <span class="spec">3 lights</span>
                     <span class="spec">320×200×200 voxels</span>
                     <span class="spec">Full shadows</span>
@@ -340,13 +346,28 @@
 
     <div id="custom-sliders">
         <div class="slider-row">
-            <span class="slider-label">Entities</span>
+            <span class="slider-label">Spheres</span>
             <input type="range" id="s-entities" min="1" max="256" step="1" value="128">
             <span class="slider-value" id="v-entities">128</span>
         </div>
         <div class="slider-row">
+            <span class="slider-label">FOV</span>
+            <input type="range" id="s-fov" min="30" max="120" step="1" value="80">
+            <span class="slider-value" id="v-fov">80</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Radius Min</span>
+            <input type="range" id="s-radius-min" min="4" max="32" step="1" value="8">
+            <span class="slider-value" id="v-radius-min">8</span>
+        </div>
+        <div class="slider-row">
+            <span class="slider-label">Radius Max</span>
+            <input type="range" id="s-radius-max" min="4" max="32" step="1" value="16">
+            <span class="slider-value" id="v-radius-max">16</span>
+        </div>
+        <div class="slider-row">
             <span class="slider-label">Lights</span>
-            <input type="range" id="s-lights" min="1" max="3" step="1" value="3">
+            <input type="range" id="s-lights" min="1" max="10" step="1" value="3">
             <span class="slider-value" id="v-lights">3</span>
         </div>
         <div class="slider-row">
@@ -396,7 +417,7 @@
 
 <script type="module">
     const DEFAULT_CUSTOM = {
-        numEntities: 128, nLights: 3,
+        numEntities: 128, fov: 80, entityRadiusMin: 8, entityRadiusMax: 16, nLights: 3,
         w: 320, h: 200, d: 200,
         shadowCastDistance: 128,
         maxDpr: 1,
@@ -425,13 +446,28 @@
                 </div>
                 <div id="custom-panel-body">
                     <div class="slider-row">
-                        <span class="slider-label">Entities</span>
+                        <span class="slider-label">Spheres</span>
                         <input type="range" id="ps-entities" min="1" max="256" step="1" value="${s.numEntities}">
                         <span class="slider-value" id="pv-entities">${s.numEntities}</span>
                     </div>
                     <div class="slider-row">
+                        <span class="slider-label">FOV</span>
+                        <input type="range" id="ps-fov" min="30" max="120" step="1" value="${s.fov}">
+                        <span class="slider-value" id="pv-fov">${s.fov}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Radius Min</span>
+                        <input type="range" id="ps-radius-min" min="4" max="32" step="1" value="${s.entityRadiusMin}">
+                        <span class="slider-value" id="pv-radius-min">${s.entityRadiusMin}</span>
+                    </div>
+                    <div class="slider-row">
+                        <span class="slider-label">Radius Max</span>
+                        <input type="range" id="ps-radius-max" min="4" max="32" step="1" value="${s.entityRadiusMax}">
+                        <span class="slider-value" id="pv-radius-max">${s.entityRadiusMax}</span>
+                    </div>
+                    <div class="slider-row">
                         <span class="slider-label">Lights</span>
-                        <input type="range" id="ps-lights" min="1" max="3" step="1" value="${s.nLights}">
+                        <input type="range" id="ps-lights" min="1" max="10" step="1" value="${s.nLights}">
                         <span class="slider-value" id="pv-lights">${s.nLights}</span>
                     </div>
                     <div class="slider-row">
@@ -471,10 +507,28 @@
             document.body.appendChild(panel);
 
             // Live readouts
-            ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+            ['entities','fov','radius-min','radius-max','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
                 const input = document.getElementById('ps-' + id);
                 const display = document.getElementById('pv-' + id);
                 input.addEventListener('input', () => { display.textContent = input.value; });
+            });
+
+            // Radius min/max constraint
+            document.getElementById('ps-radius-min').addEventListener('input', () => {
+                const minEl = document.getElementById('ps-radius-min');
+                const maxEl = document.getElementById('ps-radius-max');
+                if (parseInt(minEl.value) > parseInt(maxEl.value)) {
+                    maxEl.value = minEl.value;
+                    document.getElementById('pv-radius-max').textContent = maxEl.value;
+                }
+            });
+            document.getElementById('ps-radius-max').addEventListener('input', () => {
+                const minEl = document.getElementById('ps-radius-min');
+                const maxEl = document.getElementById('ps-radius-max');
+                if (parseInt(maxEl.value) < parseInt(minEl.value)) {
+                    minEl.value = maxEl.value;
+                    document.getElementById('pv-radius-min').textContent = minEl.value;
+                }
             });
 
             // Collapse toggle
@@ -489,6 +543,9 @@
             document.getElementById('custom-apply').addEventListener('click', () => {
                 sessionStorage.setItem('customSettings', JSON.stringify({
                     numEntities:        parseInt(document.getElementById('ps-entities').value),
+                    fov:                parseInt(document.getElementById('ps-fov').value),
+                    entityRadiusMin:    parseInt(document.getElementById('ps-radius-min').value),
+                    entityRadiusMax:    parseInt(document.getElementById('ps-radius-max').value),
                     nLights:            parseInt(document.getElementById('ps-lights').value),
                     w:                  parseInt(document.getElementById('ps-w').value),
                     h:                  parseInt(document.getElementById('ps-h').value),
@@ -547,10 +604,28 @@
         });
 
         // Live readouts for range inputs
-        ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+        ['entities','fov','radius-min','radius-max','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
             const input = document.getElementById('s-' + id);
             const display = document.getElementById('v-' + id);
             input.addEventListener('input', () => { display.textContent = input.value; });
+        });
+
+        // Radius min/max constraint
+        document.getElementById('s-radius-min').addEventListener('input', () => {
+            const minEl = document.getElementById('s-radius-min');
+            const maxEl = document.getElementById('s-radius-max');
+            if (parseInt(minEl.value) > parseInt(maxEl.value)) {
+                maxEl.value = minEl.value;
+                document.getElementById('v-radius-max').textContent = maxEl.value;
+            }
+        });
+        document.getElementById('s-radius-max').addEventListener('input', () => {
+            const minEl = document.getElementById('s-radius-min');
+            const maxEl = document.getElementById('s-radius-max');
+            if (parseInt(maxEl.value) < parseInt(minEl.value)) {
+                minEl.value = maxEl.value;
+                document.getElementById('v-radius-min').textContent = minEl.value;
+            }
         });
 
         // If returning to custom, show panel and populate sliders
@@ -560,6 +635,9 @@
             if (stored) {
                 const s = JSON.parse(stored);
                 document.getElementById('s-entities').value    = s.numEntities;
+                document.getElementById('s-fov').value         = s.fov;
+                document.getElementById('s-radius-min').value  = s.entityRadiusMin;
+                document.getElementById('s-radius-max').value  = s.entityRadiusMax;
                 document.getElementById('s-lights').value      = s.nLights;
                 document.getElementById('s-w').value           = s.w;
                 document.getElementById('s-h').value           = s.h;
@@ -568,7 +646,7 @@
                 document.getElementById('s-dpr').value         = s.maxDpr;
                 document.getElementById('s-pcf').value         = s.shadowPcfTaps;
                 // Sync readouts after programmatic value set
-                ['entities','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
+                ['entities','fov','radius-min','radius-max','lights','w','h','d','shadow-dist','dpr'].forEach(id => {
                     document.getElementById('v-' + id).textContent =
                         document.getElementById('s-' + id).value;
                 });
@@ -580,6 +658,9 @@
             if (selectedPreset === 'custom') {
                 sessionStorage.setItem('customSettings', JSON.stringify({
                     numEntities:        parseInt(document.getElementById('s-entities').value),
+                    fov:                parseInt(document.getElementById('s-fov').value),
+                    entityRadiusMin:    parseInt(document.getElementById('s-radius-min').value),
+                    entityRadiusMax:    parseInt(document.getElementById('s-radius-max').value),
                     nLights:            parseInt(document.getElementById('s-lights').value),
                     w:                  parseInt(document.getElementById('s-w').value),
                     h:                  parseInt(document.getElementById('s-h').value),

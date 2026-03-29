@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <rect width="800" height="400" fill="#1a1a2e"/>
+
+  <!-- Grid: 5 columns, cell width=120, origin x=80; 3 rows, cell height=100, origin y=60 -->
+  <!-- Vertical lines at x=80,200,320,440,560,680 -->
+  <line x1="80"  y1="60" x2="80"  y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="200" y1="60" x2="200" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="320" y1="60" x2="320" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="440" y1="60" x2="440" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="560" y1="60" x2="560" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="680" y1="60" x2="680" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <!-- Horizontal lines at y=60,160,260,360 -->
+  <line x1="80" y1="60"  x2="680" y2="60"  stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="80" y1="160" x2="680" y2="160" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="80" y1="260" x2="680" y2="260" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+  <line x1="80" y1="360" x2="680" y2="360" stroke="#4fc3f7" stroke-width="1" opacity="0.5"/>
+
+  <!-- Ray from (80, 330) heading to (680, 80) -->
+  <!-- Parametric: p = (80,330) + t*(600,-250) -->
+  <!-- x-boundaries at x=200,320,440,560,680 -->
+  <!-- t_x = (200-80)/600=0.2, (320-80)/600=0.4, (440-80)/600=0.6, (560-80)/600=0.8, (680-80)/600=1.0 -->
+  <!-- y at t=0.2: 330 + 0.2*(-250)=330-50=280 -->
+  <!-- y at t=0.4: 330-100=230 -->
+  <!-- y-boundaries at y=260,160,60 -->
+  <!-- t_y = (330-260)/250=0.28, (330-160)/250=0.68, (330-60)/250=1.08 -->
+  <!-- y at x-crossings: t=0.2 y=280, t=0.4 y=230, t=0.6 y=180, t=0.8 y=130, t=1.0 y=80 -->
+  <!-- Ray line -->
+  <line x1="80" y1="330" x2="700" y2="75" stroke="#ff9800" stroke-width="2"/>
+  <polygon points="700,75 684,86 692,72" fill="#ff9800"/>
+
+  <!-- tMax.x: distance to next x-boundary (first one at x=200) -->
+  <!-- Crossing at (200, 280) -->
+  <circle cx="200" cy="280" r="5" fill="#4fc3f7"/>
+  <!-- tMax.y: distance to next y-boundary (first one at y=260) -->
+  <!-- Ray at y=260: 330-250*t=260 → t=0.28, x=80+600*0.28=248 -->
+  <circle cx="248" cy="260" r="5" fill="#ff9800"/>
+
+  <!-- tMax.x arrow (along ray from origin to first x boundary) -->
+  <line x1="80" y1="330" x2="200" y2="280" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="105" y="323" font-family="sans-serif" font-size="13" fill="#4fc3f7">tMax.x</text>
+
+  <!-- tMax.y arrow (along ray from origin to first y boundary) -->
+  <line x1="80" y1="330" x2="248" y2="260" stroke="#ff9800" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="150" y="270" font-family="sans-serif" font-size="13" fill="#ff9800">tMax.y</text>
+
+  <!-- tDelta.x: distance between consecutive x boundaries along ray -->
+  <!-- Second x crossing at (320, 230) -->
+  <circle cx="320" cy="230" r="5" fill="#4fc3f7"/>
+  <line x1="200" y1="280" x2="320" y2="230" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Arrow annotation -->
+  <text x="235" y="244" font-family="sans-serif" font-size="13" fill="#4fc3f7">tDelta.x</text>
+
+  <!-- tDelta.y: distance between consecutive y boundaries along ray -->
+  <!-- Second y crossing at y=160: t=(330-160)/250=0.68, x=80+600*0.68=488 -->
+  <circle cx="488" cy="160" r="5" fill="#ff9800"/>
+  <line x1="248" y1="260" x2="488" y2="160" stroke="#ff9800" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="350" y="195" font-family="sans-serif" font-size="13" fill="#ff9800">tDelta.y</text>
+
+  <!-- Origin dot -->
+  <circle cx="80" cy="330" r="5" fill="#ffffff"/>
+  <text x="55" y="345" font-family="sans-serif" font-size="12" fill="#ffffff">pos</text>
+
+  <!-- Formula box -->
+  <rect x="540" y="260" width="220" height="90" fill="#0d0d1f" stroke="#333" rx="4"/>
+  <text x="550" y="280" font-family="monospace" font-size="12" fill="#4fc3f7">tDelta = 1 / |rd|</text>
+  <text x="550" y="300" font-family="monospace" font-size="12" fill="#ff9800">tMax = (next boundary</text>
+  <text x="558" y="316" font-family="monospace" font-size="12" fill="#ff9800">  - pos) / rd</text>
+  <text x="550" y="340" font-family="monospace" font-size="12" fill="#ffffff">advance smallest tMax</text>
+
+  <!-- Title -->
+  <text x="400" y="390" font-family="sans-serif" font-size="13" fill="#888" text-anchor="middle">DDA: tMax and tDelta — Parametric Distances to Cell Boundaries</text>
+</svg>

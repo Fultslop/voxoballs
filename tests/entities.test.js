@@ -16,7 +16,7 @@ vi.mock('three', () => {
     return { Vector3 };
 });
 
-vi.mock('../js/config.js', () => ({ W, H, D, NUM_ENTITIES: 4 }));
+vi.mock('../js/config.js', () => ({ W, H, D, NUM_ENTITIES: 4, ENTITY_RADIUS_MIN: 8, ENTITY_RADIUS_MAX: 16 }));
 
 // Re-import entities fresh for each test so prevDirtyBounds resets
 let initWalls, createEntities, updateEntities;
@@ -34,7 +34,7 @@ beforeEach(async () => {
         }
         return { Vector3 };
     });
-    vi.mock('../js/config.js', () => ({ W, H, D, NUM_ENTITIES: 4 }));
+    vi.mock('../js/config.js', () => ({ W, H, D, NUM_ENTITIES: 4, ENTITY_RADIUS_MIN: 8, ENTITY_RADIUS_MAX: 16 }));
     ({ initWalls, createEntities, updateEntities } = await import('../js/entities.js'));
 });
 
@@ -86,12 +86,12 @@ describe('createEntities', () => {
         expect(entities).toHaveLength(4);
     });
 
-    it('each entity size is in [8, 15]', () => {
+    it('each entity size is in [ENTITY_RADIUS_MIN, ENTITY_RADIUS_MAX]', () => {
         for (let i = 0; i < 20; i++) {
             const entities = createEntities();
             for (const e of entities) {
                 expect(e.size).toBeGreaterThanOrEqual(8);
-                expect(e.size).toBeLessThanOrEqual(15);
+                expect(e.size).toBeLessThanOrEqual(16);
             }
         }
     });

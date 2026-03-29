@@ -20,7 +20,7 @@ const { shadowRTs, renderShadows } = createShadowSystem(dataTexture, pointLights
 const { scene, camera, renderer, onResize } = createScene(dataTexture, paletteTexture, shadowRTs, pointLights, vertexShader, fragmentShader);
 onResize(); // Set initial pixel ratio from preset
 
-// FPS counter
+// FPS / frame-time counter
 const fpsEl = document.getElementById('fps-counter');
 let fpsFrames = 0;
 let fpsLast = performance.now();
@@ -65,8 +65,11 @@ function animate() {
 
     fpsFrames++;
     const now = performance.now();
-    if (now - fpsLast >= 500) {
-        fpsEl.textContent = Math.round(fpsFrames * 1000 / (now - fpsLast)) + ' FPS';
+    const elapsed = now - fpsLast;
+    if (elapsed >= 500) {
+        const fps = Math.round(fpsFrames * 1000 / elapsed);
+        const ms = (elapsed / fpsFrames).toFixed(1);
+        fpsEl.textContent = `${fps} FPS (${ms} ms)`;
         fpsFrames = 0;
         fpsLast = now;
     }

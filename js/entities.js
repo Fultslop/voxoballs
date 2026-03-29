@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { W, H, D, NUM_ENTITIES } from './config.js';
+import { W, H, D, NUM_ENTITIES, ENTITY_RADIUS_MIN, ENTITY_RADIUS_MAX } from './config.js';
 import { stampSphere, entityBounds, unionBounds, clearRegion } from './voxel-math.js';
 
 /**
@@ -23,7 +23,7 @@ export function initWalls(voxelData) {
 
 export function createEntities() {
     return Array.from({ length: NUM_ENTITIES }, () => {
-        const size = Math.floor(Math.random() * 8) + 8;
+        const size = ENTITY_RADIUS_MIN + Math.floor(Math.random() * (ENTITY_RADIUS_MAX - ENTITY_RADIUS_MIN + 1));
         return {
             pos: new THREE.Vector3(
                 size + Math.random() * (W - 2 * size),

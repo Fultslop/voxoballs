@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <rect width="800" height="400" fill="#1a1a2e"/>
+
+  <!-- LEFT: Voxel grid (4x4 sample showing index values) -->
+  <text x="130" y="35" font-family="sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">Voxel grid (1 byte/voxel)</text>
+
+  <!-- 5x5 grid of cells, cell=55px, origin=(20,50) -->
+  <!-- Row 0 -->
+  <rect x="20"  y="50" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="47"  y="82" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">0</text>
+  <rect x="75"  y="50" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="102" y="82" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">3</text>
+  <rect x="130" y="50" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="157" y="82" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">3</text>
+  <rect x="185" y="50" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="212" y="82" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">0</text>
+  <!-- Row 1 -->
+  <rect x="20"  y="105" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="47"  y="137" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">7</text>
+  <rect x="75"  y="105" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="102" y="137" font-family="monospace" font-size="14" fill="#ff9800" text-anchor="middle">3</text>
+  <rect x="130" y="105" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="157" y="137" font-family="monospace" font-size="14" fill="#ff9800" text-anchor="middle">3</text>
+  <rect x="185" y="105" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="212" y="137" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">7</text>
+  <!-- Row 2 -->
+  <rect x="20"  y="160" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="47"  y="192" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">0</text>
+  <rect x="75"  y="160" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="102" y="192" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">7</text>
+  <rect x="130" y="160" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="157" y="192" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">7</text>
+  <rect x="185" y="160" width="55" height="55" fill="#4fc3f7" opacity="0.12" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="212" y="192" font-family="monospace" font-size="14" fill="#ffffff" text-anchor="middle">0</text>
+  <!-- Row 3 (wall row) -->
+  <rect x="20"  y="215" width="55" height="55" fill="#4fc3f7" opacity="0.4"  stroke="#4fc3f7" stroke-width="1"/>
+  <text x="47"  y="247" font-family="monospace" font-size="14" fill="#1a1a2e" text-anchor="middle">255</text>
+  <rect x="75"  y="215" width="55" height="55" fill="#4fc3f7" opacity="0.4"  stroke="#4fc3f7" stroke-width="1"/>
+  <text x="102" y="247" font-family="monospace" font-size="14" fill="#1a1a2e" text-anchor="middle">255</text>
+  <rect x="130" y="215" width="55" height="55" fill="#4fc3f7" opacity="0.4"  stroke="#4fc3f7" stroke-width="1"/>
+  <text x="157" y="247" font-family="monospace" font-size="14" fill="#1a1a2e" text-anchor="middle">255</text>
+  <rect x="185" y="215" width="55" height="55" fill="#4fc3f7" opacity="0.4"  stroke="#4fc3f7" stroke-width="1"/>
+  <text x="212" y="247" font-family="monospace" font-size="14" fill="#1a1a2e" text-anchor="middle">255</text>
+
+  <text x="130" y="290" font-family="sans-serif" font-size="11" fill="#4fc3f7" text-anchor="middle">wall (index 255)</text>
+  <text x="130" y="308" font-family="sans-serif" font-size="11" fill="#888" text-anchor="middle">0 = empty, 1–254 = entity</text>
+
+  <!-- Arrow to palette -->
+  <text x="285" y="180" font-family="sans-serif" font-size="22" fill="#ffffff">→</text>
+  <text x="275" y="200" font-family="sans-serif" font-size="10" fill="#888">lookup</text>
+
+  <!-- MIDDLE: Palette (256-entry, shown as a vertical strip with key entries) -->
+  <text x="430" y="35" font-family="sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">Palette (256 × RGB)</text>
+
+  <!-- Palette strip: 16px wide, entries as colored rows -->
+  <!-- Just show ~12 entries with labels -->
+  <rect x="370" y="50" width="30" height="270" fill="#111" stroke="#4fc3f7" stroke-width="1"/>
+
+  <!-- Entry 0: empty/black -->
+  <rect x="370" y="50" width="30" height="20" fill="#111"/>
+  <text x="406" y="64" font-family="monospace" font-size="11" fill="#888">0  — empty</text>
+
+  <!-- Entry 1 -->
+  <rect x="370" y="70" width="30" height="20" fill="#e53935"/>
+  <text x="406" y="84" font-family="monospace" font-size="11" fill="#e53935">1  — red entity</text>
+
+  <!-- Entry 2 -->
+  <rect x="370" y="90" width="30" height="20" fill="#43a047"/>
+  <text x="406" y="104" font-family="monospace" font-size="11" fill="#43a047">2  — green entity</text>
+
+  <!-- Entry 3 (highlighted — referenced by grid) -->
+  <rect x="370" y="110" width="30" height="20" fill="#ff9800" stroke="#ff9800" stroke-width="1"/>
+  <text x="406" y="124" font-family="monospace" font-size="11" fill="#ff9800">3  — orange entity ←</text>
+
+  <!-- Entries 4–253 collapsed -->
+  <rect x="370" y="130" width="30" height="140" fill="#333"/>
+  <text x="385" y="205" font-family="sans-serif" font-size="11" fill="#888" text-anchor="middle" transform="rotate(-90,385,205)">1–254 random RGB</text>
+
+  <!-- Entry 255: wall -->
+  <rect x="370" y="290" width="30" height="30" fill="rgb(210,200,185)"/>
+  <text x="406" y="310" font-family="monospace" font-size="11" fill="rgb(210,200,185)">255 — wall (concrete)</text>
+
+  <!-- Arrow to output colour -->
+  <text x="560" y="150" font-family="sans-serif" font-size="22" fill="#ffffff">→</text>
+  <text x="550" y="170" font-family="sans-serif" font-size="10" fill="#888">resolved</text>
+
+  <!-- RIGHT: Output colour swatch -->
+  <text x="680" y="35" font-family="sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">Output colour</text>
+  <rect x="620" y="100" width="120" height="120" fill="#ff9800" rx="6"/>
+  <text x="680" y="240" font-family="monospace" font-size="13" fill="#ff9800" text-anchor="middle">rgb(255, 152, 0)</text>
+  <text x="680" y="258" font-family="sans-serif" font-size="12" fill="#888" text-anchor="middle">palette[3]</text>
+
+  <!-- GLSL snippet -->
+  <rect x="580" y="290" width="200" height="70" fill="#0d0d1f" stroke="#333" rx="4"/>
+  <text x="590" y="310" font-family="monospace" font-size="10" fill="#4fc3f7">float val = texture(uData, tc).r;</text>
+  <text x="590" y="328" font-family="monospace" font-size="10" fill="#ff9800">vec3 color = texture(uPalette,</text>
+  <text x="590" y="344" font-family="monospace" font-size="10" fill="#ff9800">  vec2(val, 0.5)).rgb;</text>
+
+  <!-- Title -->
+  <text x="400" y="390" font-family="sans-serif" font-size="13" fill="#888" text-anchor="middle">Palette Texture: 1 byte/voxel → colour via 256-entry lookup table</text>
+</svg>

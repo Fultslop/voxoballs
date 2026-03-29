@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import { W, H, D, AMBIENT, MAX_DPR } from './config.js';
+import { W, H, D, AMBIENT, MAX_DPR, FOV } from './config.js';
 
 export function createScene(dataTexture, paletteTexture, shadowRTs, pointLights, vertexShader, fragmentShader) {
     const scene = new THREE.Scene();
 
-    const fovY = 75 * Math.PI / 180;
-    const camera = new THREE.PerspectiveCamera(80, innerWidth / innerHeight, 0.1, 2000);
+    const fovY = FOV * Math.PI / 180;
+    const camera = new THREE.PerspectiveCamera(FOV, innerWidth / innerHeight, 0.1, 2000);
     const aspect = innerWidth / innerHeight;
     const fitDist = Math.min(H / 2 / Math.tan(fovY / 2), W / 2 / (Math.tan(fovY / 2) * aspect));
     camera.position.set(W / 2, H / 2, -fitDist * 0.85);
